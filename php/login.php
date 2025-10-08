@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/session.php';
 require_once __DIR__ . "/db_connect.php";
+require_once __DIR__ . '/../config/paths.php';
 
 
 $message="";
@@ -25,7 +26,6 @@ if (isset($_POST["login"])) {
                 // if password is correct
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['user_name'] = $user['name'];
-
                 $message="Login Erfolgreich. Willkommen "
                         .htmlspecialchars($user["name"])."!";
             } else {
@@ -44,8 +44,10 @@ if (isset($_POST["login"])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
+    <?php require_once INCLUDES_PATH . '/header.php'; ?>
 </head>
 <body>
+    <?php require_once INCLUDES_PATH . '/navbar.php'; ?>
     <h2>Benutzer Login</h2>
     <form action="" method="post">
         <label for="email">Email:</label><br>
@@ -58,5 +60,6 @@ if (isset($_POST["login"])) {
     </form>
 
     <p><?php echo $message; ?></p>
+    <?php require_once INCLUDES_PATH . '/footer.php'; ?>
 </body>
 </html>

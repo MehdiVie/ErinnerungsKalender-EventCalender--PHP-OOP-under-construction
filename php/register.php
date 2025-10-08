@@ -1,6 +1,6 @@
 <?php
-
 require_once __DIR__ . '/db_connect.php';
+require_once __DIR__ . '/../config/paths.php';
 $message="";
 
 if (isset($_POST["register"])) {
@@ -51,9 +51,10 @@ if (isset($_POST["register"])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrierung</title>
-    <link rel="stylesheet" href="../css/style.css" >
+    <?php require_once INCLUDES_PATH . '/header.php'; ?>
 </head>
 <body>
+    <?php require_once INCLUDES_PATH . '/navbar.php'; ?>
     <h2>Benutzer Registrierung</h2>
     <form method="POST" action="">
         <label for="name">Name:</label><br>
@@ -68,5 +69,6 @@ if (isset($_POST["register"])) {
         <button type="submit" name="register">Registrieren</button>
     </form>
     <p><?php echo $message; ?></p>
+    <?php require_once INCLUDES_PATH . '/footer.php'; ?>
 </body>
 </html>

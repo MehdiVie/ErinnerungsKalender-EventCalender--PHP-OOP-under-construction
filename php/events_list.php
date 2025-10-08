@@ -1,11 +1,13 @@
 <?php
 require_once __DIR__ . "/session.php";
 require_once __DIR__ . "/db_connect.php";
+require_once __DIR__ . '/../config/paths.php';
 
 if (!isset($_SESSION["user_name"])) {
     header('Location: login.php');
     exit;
 }
+
 
 $db=Database::getInstance();
 
@@ -21,8 +23,10 @@ $events=$records->fetchAll(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meine Termine</title>
+    <?php require_once INCLUDES_PATH . '/header.php'; ?>
 </head>
 <body>
+    <?php require_once INCLUDES_PATH . '/navbar.php'; ?>
     <h3>Meine Termine</h3>
 
     <table border="1" cellpadding="6">
@@ -49,7 +53,7 @@ $events=$records->fetchAll(PDO::FETCH_ASSOC);
                     <td><?= htmlspecialchars($event["created_at"]) ?></td>
                     <td><?= htmlspecialchars($event["updated_at"]) ?></td>
                     <td>
-                        <a href="event_edit.php?id=<?=$event["id"] ?>">Bearbeiten</a>
+                        <a href="event_edit.php?id=<?=$event["id"] ?>" ">Bearbeiten</a>
                         <a href="event_delete.php?id=<?=$event["id"] ?>" onclick="return confirm('Bist du sicher?');">Löchen</a>
                     </td>
                 </tr>
@@ -58,5 +62,6 @@ $events=$records->fetchAll(PDO::FETCH_ASSOC);
             <?php endif; ?>
         </tbody>
     </table>
+    <?php require_once INCLUDES_PATH . '/footer.php'; ?>
 </body>
 </html>

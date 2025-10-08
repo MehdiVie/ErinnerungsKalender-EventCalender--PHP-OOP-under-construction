@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . "/session.php";
 require_once __DIR__ . "/db_connect.php";
+require_once __DIR__ . '/../config/paths.php';
 
 if (!isset($_SESSION["user_name"])) {
     header('Location: login.php');
@@ -46,8 +47,10 @@ if (isset($_POST["create_event"]) && $_SERVER['REQUEST_METHOD']==='POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nuen Termin erstellen</title>
+    <?php require_once INCLUDES_PATH . '/header.php'; ?>
 </head>
 <body>
+    <?php require_once INCLUDES_PATH . '/navbar.php'; ?>
     <h3>Nuen Termin erstellen</h3>
 
     <?php if (!empty($message)): ?>
@@ -73,5 +76,6 @@ if (isset($_POST["create_event"]) && $_SERVER['REQUEST_METHOD']==='POST') {
     </form>
 
     <p><a href="events_list.php">Zurück zur Terminliste</a></p>
+    <?php require_once INCLUDES_PATH . '/footer.php'; ?>
 </body>
 </html>
