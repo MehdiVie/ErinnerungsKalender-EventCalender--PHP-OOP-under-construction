@@ -1,35 +1,34 @@
 <?php
 require_once __DIR__ . '/../core/Controller.php';
-require_once __DIR__ . '/../repositories/UserRepository.php';
+require_once __DIR__ . '/../Services/UserService.php';
+
 
 class AuthController extends Controller {
-    private UserRepository $repo;
+    private UserService $service;
 
     public function __construct() {
-        $this->repo = new UserRepository();
+        $this->service = new UserService();
         if (session_status() === PHP_SESSION_NONE) {
         session_start();
     }
     }
 
     public function register() {
-        if ($this->isPost()) {
-            $res = $this->repo->emailExists(trim($_POST["email"]));
-            if (!$res) {
-                $new_user = $this->repo->create([
-                    "name" => trim($_POST["name"]),
-                    "email" => trim($_POST["email"]),
-                    "password" => $_POST["password"]
-                    ]);
-                if ($new_user) {
-                    $this->view('auth/login', 
-                    ['message' => 'User Erfolgreich registriert.']); 
-                }
-            }
-            else {
-               $this->view('auth/register', 
-               ['error' => 'Email bereits registriert.']); 
-            }
+
+        if ($this->isPost()) { 
+
+            $response = $this->service->registerUser([
+                "name" => trim($_POST["name"]),
+                "email" => trim($_POST["email"]),
+                "password" => $_POST["password"]
+                ]);
+
+            if (!$response['success']) {
+                $this->view('auth/register' ,['errors' => $response['errors']]);
+            } else  {
+                $this->view('auth/register' ,['message'=> $response['message']]);
+            } 
+            
         }
         else {
         $this->view('auth/register');
@@ -37,18 +36,19 @@ class AuthController extends Controller {
     }
 
     public function login() {
+
         if ($this->isPost()) {
-            $res = $this->repo->verifyLogin(
+
+            $response = $this->service->loginUser(
                 trim($_POST["email"]) , 
                 $_POST['password']
             );
-            if ($res) {
-                $_SESSION["user_name"]=$res["name"];
-                $_SESSION["user_id"]=$res["id"];
+
+            if ($response['success']) {
                 $this->redirect('/');
             } else {
                 $this->view('auth/login',
-                ['error' => 'Email oder Password sind falsch.']
+                ['errors' => $response['errors']]
                 );
             }
         }
@@ -59,18 +59,8 @@ class AuthController extends Controller {
     }
 
     public function logout() {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-        $_SESSION = [];
-        if (ini_get("session.use_cookies")) {
-            $params = session_get_cookie_params();
-            setcookie(session_name(), '', time() - 42000,
-                $params["path"], $params["domain"],
-                $params["secure"], $params["httponly"]
-            );
-        }
-        session_destroy();   
+
+        $this->service->logoutUser();  
         $this->redirect('/login');
     }
 

@@ -1,5 +1,10 @@
     <h3>Meine Termine</h3>
-
+    <?php if (!empty($_SESSION['flash_message'])): ?>
+        <div class="alert alert-success">
+            <?= htmlspecialchars($_SESSION['flash_message']) ?>
+        </div>
+        <?php unset($_SESSION['flash_message']); ?>
+    <?php endif; ?>
     <table border="1" cellpadding="6">
         <thead>
             <tr>

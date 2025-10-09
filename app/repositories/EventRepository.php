@@ -11,8 +11,8 @@ class EventRepository extends Model {
     }
 
     public function findById(int $event_id) : ?array {
-        $sql = "select * from events where id = :event_id ";
-        $res = $this->query($sql , [":event_id"=>$event_id]);
+        $sql = "select * from events where id = :event_id AND user_id=:user_id";
+        $res = $this->query($sql , [":event_id"=>$event_id , ":user_id"=>$_SESSION["user_id"]]);
         $event = $res->fetch(PDO::FETCH_ASSOC);
         return $event?:null;
     }
