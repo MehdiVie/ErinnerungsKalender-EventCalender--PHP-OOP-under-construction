@@ -1,14 +1,17 @@
 <?php
-require_once __DIR__ . '/../repositories/EventRepositories.php';
+require_once __DIR__ . '/../repositories/EventRepository.php';
 require_once __DIR__ . '/MailService.php';
+require_once __DIR__ . '/ValidationService.php';
 
 class EventService {
     private EventRepository $repo;
     private MailService $mailer;
+    private ValidationService $validation;
 
     public function __construct() {
         $this->repo = new EventRepository();
         $this->mailer = new MailService();
+        $this->validation = new ValidationService();
     }
 
     public function getUserEvents(int $user_id) : ?array {
@@ -16,7 +19,14 @@ class EventService {
         return $events;
     }
 
-    public function createEvent(array $data) :  bool {
+    public function createEvent(array $data) :  array {
+
+        $errors = $this->validation->validateEvent($data);
+
+        if (!empty($errors)) {
+            return ['success' => false , 'errors' => $errors , 
+                    'event' => $data ];
+        }
 
         $new_event = $this->repo->create([
                         'user_id' => $_SESSION['user_id'] ,
@@ -29,9 +39,16 @@ class EventService {
         
         if ($new_event) {
             $this->checkSendEmail($data['title'],$data['event_date']);
+            $_SESSION['flash_message_create']= 'Termin Erfolgreich erstellt.';
+            return ['success' => true ];
+        } else {
+            return ['success' => false , 
+                    'errors' => ['Fehler beim Erstellen des Termins. Versuchen Sie noch  einmal.'] ,
+                    'event' => $data
+                   ];
         }
 
-        return $new_event;
+        
 
     }
 
@@ -40,7 +57,13 @@ class EventService {
         return $event;
     }
 
-    public function updateEvent(int $event_id , array $data) : bool {
+    public function updateEvent(int $event_id , array $data) : ?array {
+
+        $errors = $this->validation->validateEvent($data);
+
+        if (!empty($errors)) {
+            return ['success'=> false , 'errors' => $errors , 'event' => $data];
+        }
 
         $updated_event= $this->repo->update($event_id , [
                         'user_id' => $_SESSION['user_id'] ,
@@ -52,14 +75,24 @@ class EventService {
                     ]);
             
         if ($updated_event) {
-            $this->checkSendEmail($data['title'],$data['event_date']);
+            //$this->checkSendEmail($data['title'],$data['event_date']);
+            $_SESSION['flash_message_update']= 'Termin Erfolgreich bearbeitet.';
+            return ['success' => true ];
+        } else {
+            return ['success' => false , 
+                    'errors' => ['Fehler beim Bearbeiten des Termins. Versuchen Sie noch  einmal.'] ,
+                    'event' => $data
+                   ];
         }
-
-        return $updated_event;
     }
 
     public function deleteEvent(int $event_id , int $user_id) : bool {
         $deleted_event = $this->repo->delete($event_id,$user_id);
+        if ($deleted_event) {
+            $_SESSION['flash_message_email']="Termin Erfolgreich gelöcht.";
+        } else {
+            $_SESSION['flash_message_email']="Fehler beim Löchen. Versuchen Sie noch einmal!";
+        }
         return $deleted_event;
     }
 
@@ -69,7 +102,7 @@ class EventService {
         $sentEmail = $this->mailer->preSendEmail($event_title , $event_date);
 
         if ($sentEmail) {
-            $_SESSION['flash_message'] = 'E-Mail wurde erfolgreich gesendet!';
+            $_SESSION['flash_message_email'] = 'E-Mail wurde erfolgreich gesendet!';
         }
 
     }

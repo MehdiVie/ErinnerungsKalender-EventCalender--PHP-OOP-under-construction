@@ -1,17 +1,14 @@
 <?php
 require_once __DIR__ . '/../core/Controller.php';
-require_once __DIR__ . '/../repositories/EventRepository.php';
-require_once __DIR__ . '/../services/MailService.php';
+require_once __DIR__ . '/../services/EventService.php';
 
 class EventController extends Controller {
-    //private EventRepository $repo;
+    
     private EventService $service;
     
 
     public function __construct() {
-        //$this->repo = new EventRepository();
         $this->service = new EventService();
-        //$this->mailer = new MailService();
     }
 
     public function index() {
@@ -29,17 +26,29 @@ class EventController extends Controller {
         $this->requireLogin();
         if ($this->isPost()) {
 
-            $this->service->createEvent([
+            $response=$this->service->createEvent([
                         'user_id' => $_SESSION['user_id'] ,
-                        'title' => $_POST['title'] , 
-                        'description' => $_POST['description'] , 
+                        'title' => trim($_POST['title']) , 
+                        'description' => trim($_POST['description']) , 
                         'event_date' => $_POST['event_date'] ,
                         'reminder_time' => !empty($_POST['reminder_time']) ? 
                                             $_POST['reminder_time'] : null
                     ]);
+
+
+
+            if (!$response['success']) {
+                $this->view('events/create' ,[
+                    'errors' => $response['errors'] , 
+                    'event' => $response['event']
+                ]);
+            } else  {
+                $this->redirect('/', ['message'=> $response['message']]);
+            } 
         }
-        
-        $this->redirect('/');   
+        else {
+            $this->redirect('/');
+        } 
     }
 
     public function edit() {
@@ -52,17 +61,29 @@ class EventController extends Controller {
     public function update() {
         $this->requireLogin();
         if ($this->isPost()) {
-            $this->service->updateEvent($_POST["event_id"] , [
+            $response=$this->service->updateEvent($_POST["event_id"] , [
                         'user_id' => $_SESSION['user_id'] ,
-                        'title' => $_POST['title'] , 
-                        'description' => $_POST['description'] , 
+                        'id' => $_POST["event_id"] ,
+                        'title' => trim($_POST['title']) , 
+                        'description' => trim($_POST['description']) , 
                         'event_date' => $_POST['event_date'] ,
                         'reminder_time' => !empty($_POST['reminder_time']) ? 
                                             $_POST['reminder_time'] : null
                     ]);
+
+            if (!$response['success']) {
+                $this->view('events/edit' ,[
+                    'errors' => $response['errors'] , 
+                    'event' => $response['event']
+                ]);
+            } else  {
+                $this->redirect('/', ['message'=> $response['message']]);
+            } 
+        }
+        else {
+            $this->redirect('/');
         }
         
-        $this->redirect('/');
         
     }
 

@@ -1,9 +1,12 @@
     <h2>Benutzer Registrierung</h2>
     <?php if (isset($errors)): ?>
-        <div class="alert alert-danger"><?= $errors ?? null ?></div>
-    <?php endif; ?>
-    <?php if (isset($message)): ?>
-        <div class="alert alert-success"><?= $message ?? null ?></div>
+        <div class="alert alert-danger">
+            <ul>
+                <?php foreach ($errors as $error): ?>
+                    <li><?= htmlspecialchars($error) ?></li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
     <?php endif; ?>
     <form method="POST" action="<?= BASE_URL ?>/register">
         <label for="name">Name:</label><br>

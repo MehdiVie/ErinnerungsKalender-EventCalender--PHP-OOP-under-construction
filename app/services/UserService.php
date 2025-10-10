@@ -20,16 +20,16 @@ class UserService {
             return ['success'=> false , 'errors' => $errors];
         }
 
-        if (emailExists($data["email"])) {
+        if ($this->repo->emailExists($data["email"])) {
             return ['success'=> false , 'errors' => ["E-Mail existiert bereits!"]];
         }
 
         $created_user = $this->repo->create($data);
 
         if ($created_user) {
-            return ['success' => $created_user , 'message' => "Registrierung Erflogreich."];
+            return ['success' => true , 'message' => "Registrierung Erflogreich. Einfach Einloggen!"];
         } else {
-            return ['success' => $created_user , 'errors' => ["Fehler bei der Registrierung."]];
+            return ['success' => false , 'errors' => ["Fehler bei der Registrierung."]];
         }
         
     }
@@ -37,8 +37,8 @@ class UserService {
     public function loginUser(string $email , string $password) : array {
 
         $user = $this->repo->verifyLogin(
-            trim($_POST["email"]) , 
-            $_POST['password']
+            $email , 
+            $password
             );
 
         if ($user) {

@@ -11,7 +11,7 @@ class MailService {
 
     private string $fromEmail = "salimimehdibeti@gmail.com";
     private string $fromName  = "Erinnerungskalender";
-    private string $appPassword = "kgphrlhqdfaditis"; // App Password Gmail
+    private string $appPassword = "bijygujihclyjjqg"; // App Password Gmail
 
     public function sendMail(string $to, string $subject, string $htmlMessage): bool {
         $mail = new PHPMailer(true);
@@ -55,11 +55,10 @@ class MailService {
 
     public function preSendEmail(string $event_title , 
                                                 string $event_date ) : bool {
-        $message = buildReminderEmail($_SESSION["user_name"] , $event_title ,
-                                        $event_date);
+        $message = $this->buildReminderEmail($_SESSION["user_name"] , $event_title , $event_date);
         $subject = "Erinnerung für " . $event_title;
         $to = $_SESSION["user_email"];
-        return sendMail($to,$subject,$message);
+        return $this->sendMail($to,$subject,$message);
 
     }
 }

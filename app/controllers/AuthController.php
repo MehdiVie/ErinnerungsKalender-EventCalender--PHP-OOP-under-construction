@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '/../core/Controller.php';
-require_once __DIR__ . '/../Services/UserService.php';
+require_once __DIR__ . '/../services/UserService.php';
 
 
 class AuthController extends Controller {
@@ -26,7 +26,7 @@ class AuthController extends Controller {
             if (!$response['success']) {
                 $this->view('auth/register' ,['errors' => $response['errors']]);
             } else  {
-                $this->view('auth/register' ,['message'=> $response['message']]);
+                $this->view('auth/login' ,['message'=> $response['message']]);
             } 
             
         }
@@ -45,6 +45,8 @@ class AuthController extends Controller {
             );
 
             if ($response['success']) {
+                $_SESSION['flash_message'] = 'Willkommen zurück, ' . 
+                                            $_SESSION['user_name'] . '!';
                 $this->redirect('/');
             } else {
                 $this->view('auth/login',

@@ -1,25 +1,139 @@
 body {
-  background-color: #f8f9fa;
+  font-family: Arial, sans-serif;
+  background-color: #f2f2f2;
+  margin : 0;
+  padding : 0;
+  color : #333;
 }
 
-.card {
-  border-radius: 1rem;
+.container {
+  display: flex;
+  min-height: 90vh;
 }
 
-.btn-primary {
-  background-color: #007bff;
-  border: none;
+.header {
+    background-color: #e9e9e9;
+    padding: 18px 0;
+    text-align: center;
+    font-size: 24px;
+    color: #333;
+    border-bottom: 1px solid #ccc;
 }
 
-.btn-primary:hover {
-  background-color: #0069d9;
+.footer {
+    background-color: #eaeaea;
+    text-align: center;
+    padding: 12px 0;
+    border-top: 1px solid #ccc;
+    color: #666;
+    font-size: 14px;
+    
+}
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 300px;
+  background-color: #555;
+  color: white;
+  align-items:flex-end;
+  padding: 0;
 }
 
-.navbar-brand {
-  font-weight: bold;
-  font-size: 1.2rem;
+.sidebar h3 {
+  color: #ddd;
+  margin-top: 0;
 }
 
-.error-form {
-    color : #e85757;
+/*
+.sidebar a {
+  display: block;
+  color: white;
+  text-decoration: none;
+  padding: 3px 12px; 
+  margin: 0px 0 0px 120px; 
+  border: 1px solid white;
+  width: 160px;
+  border-radius: 3px;
+  font-size: 13px;
 }
+*/
+
+.sidebar a:hover {
+  background-color: #666;
+}
+
+.main-content {
+  flex: 1;
+  background-color: #fff;
+  margin: 20px;
+  padding: 25px 40px;
+  border-radius: 12px;
+}
+
+nav table {
+    width: 70%;
+    border-collapse: separate;
+    border-spacing: 5px;
+    margin-top: 30px;
+    margin-right: 0px;
+    border: 0;
+
+    
+}
+
+nav td {
+    padding: 5px 5px 5px 5px;
+    border: 1px solid #ddd;
+    text-align: left;
+    margin-right: 0px;
+    font-size: 13px;
+}
+
+nav td a {
+  color: white;
+  text-decoration: none;
+  padding: 5px 5px 5px 5px;
+}
+
+nav td a:hover {
+  color: white;
+}
+
+nav td:hover {
+    background-color: #f9f9f9;
+}
+
+button {
+    background-color: #555;
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background-color: #666;
+}
+
+.alert {
+    margin-bottom: 15px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+
+
+

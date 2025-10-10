@@ -1,16 +1,22 @@
     <h2>Benutzer Login</h2>
     <?php if (isset($errors)): ?>
-        <div class="alert alert-danger"><?= $errors ?? null ?></div>
+        <div class="alert alert-danger">
+            <ul>
+                <?php foreach ($errors as $error): ?>
+                    <li><?= htmlspecialchars($error) ?></li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
     <?php endif; ?>
-    <?php if (isset($message)): ?>
-        <div class="alert alert-success"><?= $message ?? null ?></div>
+    <?php if (!empty($message)): ?>
+        <div class="alert alert-success"><?= htmlspecialchars($message) ?></div>
     <?php endif; ?>
     <form action="<?= BASE_URL ?>/login" method="post">
         <label for="email">Email:</label><br>
-        <input type="email" name="email" id="email"><br><br>
+        <input type="email" name="email" id="email" required><br><br>
 
         <label for="password">Password:</label><br>
-        <input type="password" name="password" id="password"><br><br>
+        <input type="password" name="password" id="password" required><br><br>
 
         <button type="submit" name="login">Login</button>
     </form>
