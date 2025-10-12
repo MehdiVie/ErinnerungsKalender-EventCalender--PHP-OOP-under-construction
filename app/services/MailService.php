@@ -49,7 +49,7 @@ class MailService {
             <p>Dies ist eine Erinnerung an Ihren Termin:</p>
             <p><strong>{$eventTitle}</strong> am <strong>{$eventDate}</strong></p>
             <br>
-            <p>Viele Grüße,<br>Ihr Erinnerungskalender-Team</p>
+            <p>Ihr Erinnerungskalender-Team</p>
         ";
     }
 

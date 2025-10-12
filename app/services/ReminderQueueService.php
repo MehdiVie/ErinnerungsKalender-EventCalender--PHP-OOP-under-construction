@@ -18,6 +18,15 @@ class ReminderQueueService {
         return $this->repo->insert($event_id, $user_id, $scheduled_at);
     }
 
+    public function deleteFromQueue(int $event_id) : bool {
+        return $this->repo->deleteByEvent($event_id);
+    }
+
+    public function getEventFromQueue(int $event_id) : bool {
+        return $this->repo->findByEventId($event_id);
+    }
+
+
 
     public function processPendingReminders(): int {
         $reminders = $this->repo->getPendingReminders();

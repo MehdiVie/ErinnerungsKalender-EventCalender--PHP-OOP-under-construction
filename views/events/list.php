@@ -1,4 +1,7 @@
-    <h3>Meine Termine</h3>
+  <?php  
+    require_once __DIR__ . '/create.php';
+  ?>
+    
     <?php if (!empty($_SESSION['flash_message_delete'])): ?>
         <div class="alert alert-success"><?= htmlspecialchars($_SESSION['flash_message_delete']) ?></div>
     <?php 
@@ -22,12 +25,13 @@
     <table id="events-table" border="1" cellpadding="6">
         <thead>
             <tr>
-                <th>Titel</th>
-                <th>Beschreibung</th>
+                
+                <!--<th>Beschreibung</th>-->
                 <th>Datum</th>
+                <th>Bezeichnung</th>
                 <th>Erinnerung</th>
-                <th>Erstellt am</th>
-                <th>Geändert am</th>
+                <!--<th>Erstellt am</th>
+                <th>Geändert am</th>-->
                 <th>Aktionen</th>
             </tr>
         </thead>
@@ -36,14 +40,15 @@
                 <?php foreach ($events as $event): ?>
                 
                 <tr data-id="<?= $event['id'] ?>">
-                    <td><?= htmlspecialchars($event["title"]) ?></td>
-                    <td><?= $event["description"] ? 
-                        htmlspecialchars($event["description"]) : '-' ?></td>
                     <td><?= htmlspecialchars($event["event_date"]) ?></td>
+                    <td><?= htmlspecialchars($event["title"]) ?></td>
+                    <!--<td><?= $event["description"] ? 
+                        htmlspecialchars($event["description"]) : '-' ?></td>-->
+                    
                     <td><?= $event["reminder_time"] ? 
                         htmlspecialchars($event["reminder_time"]) : '-' ?></td>
-                    <td><?= htmlspecialchars($event["created_at"]) ?></td>
-                    <td><?= htmlspecialchars($event["updated_at"]) ?></td>
+                    <!--<td><?= htmlspecialchars($event["created_at"]) ?></td>
+                    <td><?= htmlspecialchars($event["updated_at"]) ?></td>-->
                     <td>
                         <button class="edit-btn btn btn-sm btn-warning">Bearbeiten</button>
                         <button class="delete-btn btn btn-sm btn-danger">Löschen</button>

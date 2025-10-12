@@ -5,10 +5,12 @@ define('BASE_URL', rtrim($scriptName, '/'));
 require_once __DIR__ . '/../app/core/Router.php';
 require_once __DIR__ . '/../app/controllers/EventController.php';
 require_once __DIR__ . '/../app/controllers/AuthController.php';
+require_once __DIR__ . '/../app/controllers/HomeController.php';
 
 $router = new Router();
 $event = new EventController();
 $auth  = new AuthController();
+$home  = new HomeController();
 
 
 
@@ -26,6 +28,7 @@ $router->add('/events/delete',  [$event, 'delete']);
 $router->add('/run-cron', function() {
     require_once __DIR__ . '/../app/cron/cronReminder_manual.php';
 });
+$router->add('/home',  [$home, 'index']);  
 
 // Dispatch
 $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);

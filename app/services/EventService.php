@@ -34,24 +34,23 @@ class EventService {
                         'title' => $data['title'] , 
                         'description' => $data['description'] , 
                         'event_date' => $data['event_date'] ,
-                        'reminder_time' => !empty($data['reminder_time']) ? 
-                                            $data['reminder_time'] : null
+                        'reminder_time' => $data['reminder_time']
                     ]);
 
         $updated = false;
         if ($new_event) {
         
-            if (!empty($data['reminder_time'])) {
+            /*if (!empty($data['reminder_time'])) {
                 
                 $queueService = new ReminderQueueService();
                 $queueService->scheduleReminder(
-                    $this->repo->getLastInsertId(), // event_id تازه ایجادشده
+                    $this->repo->getLastInsertId(), 
                     $_SESSION['user_id'],
                     $data['reminder_time']
                 );
-            }
+            }*/
 
-            $this->checkSendEmail($data['title'], $data['event_date'], $updated);
+            //$this->checkSendEmail($data['title'], $data['event_date'], $updated);
             $_SESSION['flash_message_create'] = 'Termin erfolgreich erstellt.';
             return ['success' => true];
         }
@@ -63,11 +62,6 @@ class EventService {
         ];
 
     }
-
-    public function getLastInsertId(): int {
-        return (int)$this->db->lastInsertId();
-    }
-
 
     public function getEvent(int $event_id) : ?array {
         $event = $this->repo->findById($event_id);
@@ -87,8 +81,7 @@ class EventService {
                         'title' => $data['title'] , 
                         'description' => $data['description'] , 
                         'event_date' => $data['event_date'] ,
-                        'reminder_time' => !empty($data['reminder_time']) ? 
-                                            $data['reminder_time'] : null
+                        'reminder_time' => $data['reminder_time']
                     ]);
 
             
@@ -96,8 +89,13 @@ class EventService {
 
         if ($updated_event) {
             
+            
             $queueService = new ReminderQueueService();
 
+            if ($queueService->getEventFromQueue($event_id)) {
+                $queueService->deleteFromQueue($event_id);
+            }
+            /*
             if (!empty($data['reminder_time'])) {
                 
                 $queueService->scheduleReminder(
@@ -107,10 +105,14 @@ class EventService {
                 );
             } else {
                 
-                $queueService->repo->deleteByEvent($event_id);
+                if ($queueService->getEventFromQueue($event_id)) {
+                    $queueService->deleteFromQueue($event_id);
+                }
+                    
             }
+            */
 
-            $this->checkSendEmail($data['title'], $data['event_date'], $updated);
+            //$this->checkSendEmail($data['title'], $data['event_date'], $updated);
             $_SESSION['flash_message_update'] = 'Termin erfolgreich bearbeitet.';
             return ['success' => true];
         }
@@ -135,7 +137,7 @@ class EventService {
     public function checkSendEmail(string $event_title , 
                                     string $event_date, bool $updated) : void {
         if ($updated) {
-            $event_title = $event_title . "(UPDATED)";
+            $event_title = "(Updated Termin)" . $event_title ;
         }
 
         $sentEmail = $this->mailer->preSendEmail($event_title , $event_date);

@@ -20,6 +20,12 @@ class ReminderQueueRepository extends Model {
         return $res->rowCount() > 0;
     }
 
+    public function findByEventId(int $event_id): bool {
+        $sql = "SELECT id FROM reminder_queue WHERE event_id = :event_id";
+        $res = $this->query($sql, [':event_id' => $event_id]);
+        return $res->rowCount() > 0;
+    }
+
     public function getPendingReminders(): ?array {
         $sql = "
             SELECT 

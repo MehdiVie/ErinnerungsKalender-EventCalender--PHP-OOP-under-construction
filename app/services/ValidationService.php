@@ -45,11 +45,11 @@ class ValidationService {
             $errors[] = "Reminder Time muss gültig sein.";
         }
 
-        if ($data['reminder_time']) {
+        if (!empty($data['reminder_time'])) {
 
             if (!$this->eventDateGreaterThanReminderTime($data['event_date']
                                               ,$data['reminder_time'])) {
-            $errors[] = "Reminder Datum muss früher als Event Datum sein.";
+            $errors[] = 'Die Erinnerungszeit darf nicht nach dem Eventdatum liegen.';
             }
         }
 

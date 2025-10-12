@@ -1,10 +1,3 @@
-<footer class="footer">
-  <small>© <?= date('Y') ?> Erinnerungskalender | MICROLAB Demo Project</small>
+<footer class="mt-auto py-3 text-center small text-muted">
+  © <?= date('Y') ?> Erinnerungskalender | MICROLAB Demo Project
 </footer>
-<script>
-    const BASE_URL = "<?= BASE_URL ?>";
-</script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script src="<?= BASE_URL ?>/js/main.js"></script>
-</body>
-</html>

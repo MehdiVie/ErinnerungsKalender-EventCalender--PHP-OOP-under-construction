@@ -27,7 +27,7 @@ class EventRepository extends Model {
             ":title" => $data["title"] ,
             ":description" => $data["description"] ?? "" ,
             ":event_date" => $data["event_date"] ,
-            ":reminder_time" => $data["reminder_time"] ?? null
+            ":reminder_time" => !empty($data["reminder_time"]) ? $data["reminder_time"] : null
         ]);
         return $res->rowCount() > 0 ;
     }
@@ -44,9 +44,10 @@ class EventRepository extends Model {
             ":title" => $data["title"] ,
             ":description" => $data["description"] ?? "" ,
             ":event_date" => $data["event_date"] ,
-            ":reminder_time" => $data["reminder_time"] ?? null
+            ":reminder_time" => !empty($data["reminder_time"]) ? $data["reminder_time"] : null
         ]);
-        return $res->rowCount() > 0 ;
+
+        return (bool)$res;
     }
 
 
@@ -59,5 +60,9 @@ class EventRepository extends Model {
             ":user_id" => $user_id 
         ]);
         return $res->rowCount() > 0 ;
+    }
+
+    public function getLastInsertId(): int {
+        return (int)$this->db->lastInsertId();
     }
 }
