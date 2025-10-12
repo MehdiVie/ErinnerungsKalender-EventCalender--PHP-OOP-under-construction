@@ -37,7 +37,7 @@ switch ($action) {
         $id = (int)$_POST['id'];
         $event = $service->getEvent($id);
         echo json_encode($event);
-        exit;
+        break;
 
     default:
         echo json_encode(['error' => 'Invalid action']);

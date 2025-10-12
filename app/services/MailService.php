@@ -11,7 +11,7 @@ class MailService {
 
     private string $fromEmail = "salimimehdibeti@gmail.com";
     private string $fromName  = "Erinnerungskalender";
-    private string $appPassword = "bijygujihclyjjqg"; // App Password Gmail
+    private string $appPassword = "ycokhvcgjifqckfw"; // App Password Gmail
 
     public function sendMail(string $to, string $subject, string $htmlMessage): bool {
         $mail = new PHPMailer(true);

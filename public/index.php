@@ -22,7 +22,10 @@ $router->add('/events/create',  [$event, 'create']);
 $router->add('/events/store',   [$event, 'store']);        
 $router->add('/events/edit',    [$event, 'edit']);         
 $router->add('/events/update',  [$event, 'update']);       
-$router->add('/events/delete',  [$event, 'delete']);       
+$router->add('/events/delete',  [$event, 'delete']);  
+$router->add('/run-cron', function() {
+    require_once __DIR__ . '/../app/cron/cronReminder_manual.php';
+});
 
 // Dispatch
 $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);

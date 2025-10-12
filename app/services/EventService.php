@@ -2,6 +2,7 @@
 require_once __DIR__ . '/../repositories/EventRepository.php';
 require_once __DIR__ . '/MailService.php';
 require_once __DIR__ . '/ValidationService.php';
+require_once __DIR__ . '/ReminderQueueService.php';
 
 class EventService {
     private EventRepository $repo;
@@ -36,21 +37,37 @@ class EventService {
                         'reminder_time' => !empty($data['reminder_time']) ? 
                                             $data['reminder_time'] : null
                     ]);
-        
+
+        $updated = false;
         if ($new_event) {
-            $this->checkSendEmail($data['title'],$data['event_date']);
-            $_SESSION['flash_message_create']= 'Termin Erfolgreich erstellt.';
-            return ['success' => true ];
-        } else {
-            return ['success' => false , 
-                    'errors' => ['Fehler beim Erstellen des Termins. Versuchen Sie noch  einmal.'] ,
-                    'event' => $data
-                   ];
+        
+            if (!empty($data['reminder_time'])) {
+                
+                $queueService = new ReminderQueueService();
+                $queueService->scheduleReminder(
+                    $this->repo->getLastInsertId(), // event_id تازه ایجادشده
+                    $_SESSION['user_id'],
+                    $data['reminder_time']
+                );
+            }
+
+            $this->checkSendEmail($data['title'], $data['event_date'], $updated);
+            $_SESSION['flash_message_create'] = 'Termin erfolgreich erstellt.';
+            return ['success' => true];
         }
 
-        
+        return [
+            'success' => false,
+            'errors' => ['Fehler beim Erstellen des Termins. Versuchen Sie noch einmal.'],
+            'event' => $data
+        ];
 
     }
+
+    public function getLastInsertId(): int {
+        return (int)$this->db->lastInsertId();
+    }
+
 
     public function getEvent(int $event_id) : ?array {
         $event = $this->repo->findById($event_id);
@@ -73,17 +90,36 @@ class EventService {
                         'reminder_time' => !empty($data['reminder_time']) ? 
                                             $data['reminder_time'] : null
                     ]);
+
             
+        $updated = true;
+
         if ($updated_event) {
-            //$this->checkSendEmail($data['title'],$data['event_date']);
-            $_SESSION['flash_message_update']= 'Termin Erfolgreich bearbeitet.';
-            return ['success' => true ];
-        } else {
-            return ['success' => false , 
-                    'errors' => ['Fehler beim Bearbeiten des Termins. Versuchen Sie noch  einmal.'] ,
-                    'event' => $data
-                   ];
+            
+            $queueService = new ReminderQueueService();
+
+            if (!empty($data['reminder_time'])) {
+                
+                $queueService->scheduleReminder(
+                    $event_id,
+                    $_SESSION['user_id'],
+                    $data['reminder_time']
+                );
+            } else {
+                
+                $queueService->repo->deleteByEvent($event_id);
+            }
+
+            $this->checkSendEmail($data['title'], $data['event_date'], $updated);
+            $_SESSION['flash_message_update'] = 'Termin erfolgreich bearbeitet.';
+            return ['success' => true];
         }
+
+        return [
+            'success' => false,
+            'errors' => ['Fehler beim Bearbeiten des Termins. Versuchen Sie noch einmal.'],
+            'event' => $data
+        ];
     }
 
     public function deleteEvent(int $event_id , int $user_id) : bool {
@@ -97,7 +133,10 @@ class EventService {
     }
 
     public function checkSendEmail(string $event_title , 
-                                    string $event_date) : void {
+                                    string $event_date, bool $updated) : void {
+        if ($updated) {
+            $event_title = $event_title . "(UPDATED)";
+        }
 
         $sentEmail = $this->mailer->preSendEmail($event_title , $event_date);
 

@@ -35,7 +35,8 @@ class EventRepository extends Model {
     public function update(int $event_id , array $data) : bool {
         $sql = "update events set
             title = :title, description = :description, 
-            event_date = :event_date , reminder_time = :reminder_time 
+            event_date = :event_date , reminder_time = :reminder_time ,
+            notified = 0, notified_at = NULL
             where id=:event_id AND user_id=:user_id";
         $res = $this->query($sql , [
             ":event_id" => $event_id ,
@@ -47,6 +48,8 @@ class EventRepository extends Model {
         ]);
         return $res->rowCount() > 0 ;
     }
+
+
 
     public function delete(int $event_id , int $user_id) : bool {
         $sql = "delete from events  

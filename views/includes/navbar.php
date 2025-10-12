@@ -32,6 +32,14 @@ if (session_status() === PHP_SESSION_NONE) {
                 <a href="<?= BASE_URL ?>/logout"> Logout</a>
             </td>
         </tr>
+        <tr>
+            <td>
+                <a href="<?= BASE_URL ?>/run-cron" >
+                    Cron Reminder ausführen
+                </a>
+            </td>
+        </tr>
+
         <?php endif; ?>
     </table>
     
