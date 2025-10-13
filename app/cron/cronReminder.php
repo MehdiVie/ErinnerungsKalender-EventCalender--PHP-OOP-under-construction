@@ -28,7 +28,10 @@ try {
     $msg = "[" . date('Y-m-d H:i:s') . "] CRON wurde erfolgreich abgeschlossen – E-Mails wurden gesendet.: {$sentCount}\n";
     file_put_contents(__DIR__ . '/cron.log', $msg, FILE_APPEND);
 
+    $_SESSION['flash_message_cron'] = 'Run-Cron (Email Skript) manuell wurde ausgeführt.';
+
     echo $msg;
+
 
 } catch (Throwable $e) {
     //log unexpected errors

@@ -1,4 +1,8 @@
-
+<?php if (!empty($_SESSION['flash_message_cron'])): ?>
+    <div class="alert alert-primary"><?= htmlspecialchars($_SESSION['flash_message_cron']) ?></div>
+    <?php 
+    unset($_SESSION['flash_message_cron']);
+endif; ?>
 
 <h6 class="fw-semibold mb-3 text-dark">
 Das MySQL-reminder ev_fill_reminder_queue ist dafür zuständig, die reminder_queue-Tabelle in der Datenbank automatisch zu füllen.
