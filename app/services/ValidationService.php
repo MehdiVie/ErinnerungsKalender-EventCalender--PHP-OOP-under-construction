@@ -34,9 +34,11 @@ class ValidationService {
         if (empty(trim($data['event_date']))) {
             $errors[] = "Datum darf nicht leer sein.";
         } else if (!$this->isValidEventDate($data['event_date'])) {
-            $min_date = new DateTime('today', $tz);
-            $min_date->add(new DateInterval('P1D'));
-            $errors[] = "Datum muss mindestens ". $min_date->format('d.m.Y') ." liegen.";
+
+            $min_date = new DateTime('tomorrow', $tz);
+            $min_date->setTime(0, 0, 0);
+
+            $errors[] = "Datum darf mindestens ". $min_date->format('d.m.Y') ." liegen.";
         }
 
         if (empty(trim($data['title']))) {
@@ -46,8 +48,10 @@ class ValidationService {
         if (empty(trim($data['reminder_time'] ?? ''))) {
             $errors[] = "Erinnerungszeit darf nicht leer sein.(Datum und Zeit mussen festgelegt werden.)";
         } else if (!$this->isValidReminderTime($data['reminder_time'])) {
-            $minDateTime = new DateTime('today', $tz);
-            $errors[] = "Das Erinnerungszeit darf mindestens ". $minDateTime->format('d.m.Y') . " liegen.";
+
+            $now = new DateTime('now', $tz);
+
+            $errors[] = "Erinnerungszeit darf mindestens ". $now->format('Y-m-d H:i') . " liegen.";
         }
         
         if (!empty($data['event_date']) && !empty($data['reminder_time'])) {
@@ -64,27 +68,29 @@ class ValidationService {
     }
 
     public function isValidEventDate(string $event_date) : bool {
-        $standard_date = DateTime::CreateFromFormat('Y-m-d' , $event_date);
+        $tz = new DateTimeZone('Europe/Vienna');
+
+    
+        $standard_date = DateTime::createFromFormat('Y-m-d', $event_date, $tz);
         if (!$standard_date || $standard_date->format('Y-m-d') !== $event_date) {
             return false;
         }
-        $tz = new DateTimeZone('Europe/Vienna');
-        $standard_date = DateTime::createFromFormat('Y-m-d', $event_date, $tz);
-        $min_date = new DateTime('today', $tz);
-        $min_date->add(new DateInterval('P1D'));
 
-        //echo $standard_date->format('Y-m-d')."<br>";
-        //echo $min_date->format('Y-m-d')."<br>";
-        //exit;
+       
+        $min_date = new DateTime('tomorrow', $tz);
+        $min_date->setTime(0, 0, 0);
+
+       
         return $standard_date >= $min_date;
     }
 
     public function isValidReminderTime(string $reminder_time) : bool {
 
-        $formats = ['Y-m-d H:i:s', 'Y-m-d\TH:i', 'Y-m-d\TH:i:s'];
         $tz = new DateTimeZone('Europe/Vienna');
+        $formats = ['Y-m-d H:i:s', 'Y-m-d\TH:i', 'Y-m-d\TH:i:s'];
         $datetime = null;
 
+            
         foreach ($formats as $format) {
             $dt = DateTime::createFromFormat($format, $reminder_time, $tz);
             if ($dt && $dt->format($format) === $reminder_time) {
@@ -93,8 +99,17 @@ class ValidationService {
             }
         }
 
-        $minDateTime = new DateTime('today', $tz);
-        return $datetime >= $minDateTime;
+        if (!$datetime) {
+            return false;
+        }
+
+        
+        $now = new DateTime('now', $tz);
+        //echo 'Now: '.$now->format('Y-m-d H:i').'<br>';
+        //echo $datetime->format('Y-m-d H:i');
+        //exit;
+
+        return $datetime >= $now;
     }
 
     public function eventDateGreaterThanReminderTime(string $event_date,
