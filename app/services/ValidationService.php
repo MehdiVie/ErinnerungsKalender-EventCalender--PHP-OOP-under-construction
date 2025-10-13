@@ -47,14 +47,14 @@ class ValidationService {
             $errors[] = "Erinnerungszeit darf nicht leer sein.(Datum und Zeit mussen festgelegt werden.)";
         } else if (!$this->isValidReminderTime($data['reminder_time'])) {
             $minDateTime = new DateTime('tomorrow', $tz);
-            $errors[] = "Das Erinnerungszeit muss mindestens ". $minDateTime->format('d.m.Y') . " liegen.";
+            $errors[] = "Das Erinnerungszeit darf mindestens ". $minDateTime->format('d.m.Y') . " liegen.";
         }
         
         if (!empty($data['event_date']) && !empty($data['reminder_time'])) {
 
             if (!$this->eventDateGreaterThanReminderTime($data['event_date']
                                               ,$data['reminder_time'])) {
-            $errors[] = 'Erinnerungszeit muss mindestens am Vortag des Datums liegen.(NICHT später)';
+            $errors[] = 'Erinnerungszeit darf maximal am Vortag des Datums liegen.(NICHT später)';
             }
         }
 

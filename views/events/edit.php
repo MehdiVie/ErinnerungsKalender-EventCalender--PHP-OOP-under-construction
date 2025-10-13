@@ -10,7 +10,7 @@
     <?php endif; ?>
     <form action="<?= BASE_URL ?>/events/update" method="post">
 
-        <label for="title">Title:</label><br>
+        <label for="title">Bezeichnung:</label><br>
         <input type="text" name="title" id="title" value="<?=htmlspecialchars($event['title']) ?>"><br><br>
 
         <!--<label for="description">Description:</label><br>
