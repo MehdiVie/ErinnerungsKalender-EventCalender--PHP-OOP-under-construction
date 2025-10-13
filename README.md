@@ -44,7 +44,7 @@ Tables:
 
 In production, use a Task Scheduler to run the script automatically.
 
-For testing, use the menu item **Run Cron**.
+For testing, use the menu item **Run-Cron**.
 
 ---
 
