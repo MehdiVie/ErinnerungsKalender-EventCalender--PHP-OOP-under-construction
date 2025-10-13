@@ -13,6 +13,9 @@ class ReminderQueueService {
     }
 
 
+    public function runManualCron(): void {
+        require __DIR__ . '/../cron/cronReminder.php';
+    }
     public function scheduleReminder(int $event_id, int $user_id, string $scheduled_at): bool {
         $this->repo->deleteByEvent($event_id);
         return $this->repo->insert($event_id, $user_id, $scheduled_at);
@@ -29,7 +32,11 @@ class ReminderQueueService {
 
 
     public function processPendingReminders(): int {
-        $reminders = $this->repo->getPendingReminders();
+        $pendings = $this->repo->getPendingReminders();
+        $faileds  = $this->repo->getFailedRemindersToRetry();
+
+        $reminders = array_merge($pendings ?? [], $faileds ?? []);
+
         if (!$reminders) return 0;
 
         $sentCount = 0;
@@ -67,5 +74,9 @@ class ReminderQueueService {
             "[" . date('Y-m-d H:i:s') . "] {$msg}\n",
             FILE_APPEND
         );
+    }
+
+    public function getReminders() : ?array {
+        return $this->repo->getAllReminders();
     }
 }

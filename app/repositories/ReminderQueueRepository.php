@@ -3,6 +3,8 @@ require_once __DIR__ . '/../core/Model.php';
 
 class ReminderQueueRepository extends Model {
 
+
+
     public function insert(int $event_id, int $user_id, string $scheduled_at): bool {
         $sql = "INSERT INTO reminder_queue (event_id, user_id, scheduled_at)
                 VALUES (:event_id, :user_id, :scheduled_at)";
@@ -42,7 +44,9 @@ class ReminderQueueRepository extends Model {
             JOIN events e ON e.id = q.event_id
             JOIN users u ON u.id = e.user_id
             WHERE e.notified = 0
+
               AND q.status = 'pending'
+
               AND q.scheduled_at <= NOW()
               AND e.reminder_time IS NOT NULL
             ORDER BY q.scheduled_at ASC
@@ -51,6 +55,38 @@ class ReminderQueueRepository extends Model {
         $res = $this->query($sql);
         $rows = $res->fetchAll(PDO::FETCH_ASSOC);
         return $rows ?: null;
+    }
+
+    public function getFailedRemindersToRetry(): ?array {
+
+        $sql = "
+            SELECT 
+                q.id AS q_id,
+                q.user_id,
+                q.scheduled_at,
+                e.title,
+                e.id AS event_id,
+                e.event_date,
+                e.reminder_time,
+                u.name AS user_name,
+                u.email AS user_email
+            FROM reminder_queue q
+            JOIN events e ON e.id = q.event_id
+            JOIN users u ON u.id = e.user_id
+            WHERE e.notified = 0
+
+              AND q.status = 'failed'
+              AND attempts < 3
+
+              AND q.scheduled_at <= NOW()
+              AND e.reminder_time IS NOT NULL
+            ORDER BY q.scheduled_at ASC
+            LIMIT 50
+        ";
+        $res = $this->query($sql);
+        $rows = $res->fetchAll(PDO::FETCH_ASSOC);
+        return $rows ?: null;
+    
     }
 
     public function markAsSent(int $queue_id, int $event_id): void {
@@ -76,5 +112,17 @@ class ReminderQueueRepository extends Model {
             ':error' => substr($errorMessage, 0, 1000),
             ':id' => $queue_id
         ]);
+    }
+
+    public function getAllReminders() : ?array {
+        $sql = "SELECT u.email , e.event_date , e.title , 
+                q.scheduled_at , q.status , q.sent_at , q.attempts
+                FROM reminder_queue q
+                JOIN events e ON e.id = q.event_id
+                JOIN users u ON u.id = q.user_id
+                ORDER BY q.scheduled_at DESC " ;
+        $res = $this->query($sql);
+        $rows = $res->fetchAll(PDO::FETCH_ASSOC);
+        return $rows ?: null;
     }
 }

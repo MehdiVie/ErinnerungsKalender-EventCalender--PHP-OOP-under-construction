@@ -13,7 +13,10 @@
   <?php else: ?>
     <a href="<?= BASE_URL ?>/" class="btn btn-secondary btn-outline-light mb-2 w-100 text-start"><i class="bi bi-calendar-check"></i> Termin Liste</a>
     <!--<a href="<?= BASE_URL ?>/events/create" class="btn btn-secondary btn-outline-light mb-2 w-100 text-start"><i class="bi bi-plus-circle"></i> Neuer Termin</a>-->
-    <a href="<?= BASE_URL ?>/logout" class="btn btn-secondary btn-outline-light mb-2 w-100 text-start"><i class="bi bi-box-arrow-right"></i> Logout</a>
-    <a href="<?= BASE_URL ?>/run-cron" class="btn btn-secondary btn-outline-light mb-2 w-100 text-start mt-4"><i class="bi bi-radioactive"></i> Cron Reminder</a>
+    
+    <a href="<?= BASE_URL ?>/reminders" class="btn btn-secondary btn-outline-light mb-2 w-100 text-start mt-4"><i class="bi bi-radioactive"></i> Emails Queue</a>
+    <a href="<?= BASE_URL ?>/run-cron" class="btn btn-secondary btn-outline-light mb-2 w-100 text-start mt-1"><i class="bi bi-radioactive"></i> Run-Cron</a>
+
+    <a href="<?= BASE_URL ?>/logout" class="btn btn-secondary btn-outline-light mb-2 w-100 text-start mt-4"><i class="bi bi-box-arrow-right"></i> Logout</a>
   <?php endif; ?>
 </div>

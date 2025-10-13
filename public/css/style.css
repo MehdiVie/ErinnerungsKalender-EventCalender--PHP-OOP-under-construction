@@ -33,7 +33,7 @@ header {
 
 
 .main-content {
-  min-height: 70vh;
+  min-height: 90vh;
   border-radius: 0.5rem;
 }
 
@@ -138,6 +138,10 @@ footer {
 
 .navbar-nav .nav-link:hover {
   color: #0d6efd !important;
+}
+
+.card-status-sent {
+  background-color: #d1e7dd; 
 }
 
 

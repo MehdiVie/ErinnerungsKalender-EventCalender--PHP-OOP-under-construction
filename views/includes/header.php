@@ -19,8 +19,9 @@
         <?php else: ?>
           <li class="nav-item"><a href="<?= BASE_URL ?>/" class="nav-link"><i class="bi bi-calendar-check"></i> Termine</a></li>
           <!--<li class="nav-item"><a href="<?= BASE_URL ?>/events/create" class="nav-link"><i class="bi bi-plus-circle"></i> Neuer Termin</a></li>-->
+          <li class="nav-item"><a href="<?= BASE_URL ?>/reminders" class="nav-link"><i class="bi bi-radioactive"></i> Emails Queue</a></li>
+          <li class="nav-item"><a href="<?= BASE_URL ?>/run-cron" class="nav-link"><i class="bi bi-radioactive"></i> Run-Cron</a></li>
           <li class="nav-item"><a href="<?= BASE_URL ?>/logout" class="nav-link"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
-          <li class="nav-item"><a href="<?= BASE_URL ?>/run-cron" class="nav-link"><i class="bi bi-radioactive"></i> Cron Reminder</a></li>
         <?php endif; ?>
       </ul>
     </div>

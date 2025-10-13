@@ -29,3 +29,21 @@
 [2025-10-13 03:44:54] Sent to salimimehdi@yahoo.com (ii)
 [2025-10-13 03:44:54] Emails sent: 2
 [2025-10-13 03:44:54] CRON wurde erfolgreich abgeschlossen – E-Mails wurden gesendet.: 2
+[2025-10-13 14:24:06] Send failed (false) for mehdidevops0@gmail.com
+[2025-10-13 14:24:06] Send failed (false) for mehdidevops0@gmail.com
+[2025-10-13 14:24:06] Emails sent: 0
+[2025-10-13 14:24:06] CRON wurde erfolgreich abgeschlossen – E-Mails wurden gesendet.: 0
+[2025-10-13 14:31:48] CRON wurde erfolgreich abgeschlossen – E-Mails wurden gesendet.: 0
+[2025-10-13 14:41:39] Exception: MailService::buildReminderEmail(): Argument #1 ($userName) must be of type string, null given, called in C:\laragon\www\erinnerungskalender\app\services\ReminderQueueService.php on line 43
+[2025-10-13 14:47:22] Send failed (false) for mehdidevops0@gmail.com
+[2025-10-13 14:47:22] Send failed (false) for mehdidevops0@gmail.com
+[2025-10-13 14:47:22] Emails sent: 0
+[2025-10-13 14:47:22] CRON wurde erfolgreich abgeschlossen – E-Mails wurden gesendet.: 0
+[2025-10-13 14:55:44] Sent to mehdidevops0@gmail.com (Test)
+[2025-10-13 14:55:46] Sent to mehdidevops0@gmail.com (Test3)
+[2025-10-13 14:55:46] Emails sent: 2
+[2025-10-13 14:55:46] CRON wurde erfolgreich abgeschlossen – E-Mails wurden gesendet.: 2
+[2025-10-13 15:39:02] Sent to mehdidevops0@gmail.com (Test3)
+[2025-10-13 15:39:03] Sent to mehdidevops0@gmail.com (Test2)
+[2025-10-13 15:39:03] Emails sent: 2
+[2025-10-13 15:39:03] CRON wurde erfolgreich abgeschlossen – E-Mails wurden gesendet.: 2

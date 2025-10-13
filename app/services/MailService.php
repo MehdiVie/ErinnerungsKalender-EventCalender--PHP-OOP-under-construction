@@ -9,22 +9,36 @@ require_once __DIR__ . '/../libs/PHPMailer/Exception.php';
 
 class MailService {
 
-    private string $fromEmail = "salimimehdibeti@gmail.com";
-    private string $fromName  = "Erinnerungskalender";
-    private string $appPassword = "ycokhvcgjifqckfw"; // App Password Gmail
+    private string $host;
+    private int $port;
+    private string $username;
+    private string $password;
+    private string $fromEmail;
+    private string $fromName;
+    private string $encryption;
+
+    public function __construct() {
+        $this->host       = $_ENV['MAIL_HOST'] ?? 'smtp.gmail.com';
+        $this->port       = (int) ($_ENV['MAIL_PORT'] ?? 587);
+        $this->username   = $_ENV['MAIL_USERNAME'] ?? '';
+        $this->password   = $_ENV['MAIL_PASSWORD'] ?? '';
+        $this->fromEmail  = $_ENV['MAIL_FROM_EMAIL'] ?? $this->username;
+        $this->fromName   = $_ENV['MAIL_FROM_NAME'] ?? 'Erinnerungskalender';
+        $this->encryption = $_ENV['MAIL_ENCRYPTION'] ?? PHPMailer::ENCRYPTION_STARTTLS;
+    }
 
     public function sendMail(string $to, string $subject, string $htmlMessage): bool {
         $mail = new PHPMailer(true);
 
         try {
-            // SMTP configuration
+            // SMTP-Konfiguration
             $mail->isSMTP();
-            $mail->Host = 'smtp.gmail.com';
-            $mail->SMTPAuth = true;
-            $mail->Username = $this->fromEmail;
-            $mail->Password = $this->appPassword;
-            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-            $mail->Port = 587;
+            $mail->Host       = $this->host;
+            $mail->SMTPAuth   = true;
+            $mail->Username   = $this->username;
+            $mail->Password   = $this->password;   
+            $mail->SMTPSecure = $this->encryption;
+            $mail->Port       = $this->port;
 
             // Absender / Empfänger
             $mail->setFrom($this->fromEmail, $this->fromName);
@@ -37,6 +51,7 @@ class MailService {
 
             $mail->send();
             return true;
+
         } catch (Exception $e) {
             error_log("Mailer Error: {$mail->ErrorInfo}");
             return false;

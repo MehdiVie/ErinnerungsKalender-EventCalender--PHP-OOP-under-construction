@@ -9,13 +9,13 @@
         </div>
     <?php endif; ?>
     <form method="POST" action="<?= BASE_URL ?>/register">
-        <label for="name">Name:</label><br>
+        <label for="name">* Name:</label><br>
         <input type="text" name="name" id="name" required><br><br>
 
-        <label for="email">E-Mail:</label><br>
+        <label for="email">* E-Mail:</label><br>
         <input type="email" name="email" id="email" required><br><br>
 
-        <label for="password">Password:</label><br>
+        <label for="password">* Password: (min 6 Zeichen)</label><br>
         <input type="password" name="password" id="password" required><br><br>
 
         <button type="submit" name="register" class="btn btn-primary px-4">Registrieren</button>
