@@ -22,7 +22,7 @@ switch ($action) {
         $rt = trim($_POST['reminder_time'] ?? '');
         $data = [
                 'title' => trim($_POST['title']),
-                'description' => trim($_POST['description']),
+                //'description' => trim($_POST['description']),
                 'event_date' => $_POST['event_date'],
                 'reminder_time' => $rt !== '' ? $rt : null,
                 'user_id' => $_SESSION['user_id']

@@ -33,11 +33,8 @@ header {
 
 
 .main-content {
-  max-width: 900px;
-  margin: auto;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  min-height: 700px;
+  min-height: 70vh;
+  border-radius: 0.5rem;
 }
 
 
@@ -75,6 +72,42 @@ footer {
   .home-image-top {
     margin-bottom: 30px;
   }
+  .sidebar {
+    display: none;
+  }
+  .d-md-none {
+    display: none !important; /* کارت‌ها در دسکتاپ پنهان */
+  }
+}
+
+@media (max-width: 768px) {
+  #events-table {
+    display: none; /* جدول در موبایل پنهان میشه */
+  }
+
+  .card {
+    border-radius: 10px;
+  }
+
+  .card-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+  .sidebar {
+    display: none;
+  }
+  form .form-label {
+    font-size: 0.95rem;
+  }
+
+  form input, 
+  form textarea {
+    font-size: 0.95rem;
+  }
+
+  .card-body {
+    padding: 1rem 1.25rem;
+  }
 }
 
 .home-content {
@@ -96,6 +129,15 @@ footer {
   margin-bottom: 20px;
   object-fit: cover;
   border-radius: 6px;
-  max-height: 250px;
+  max-width: 290px;
 }
+
+.navbar-nav .nav-link {
+  color: #555 !important;
+}
+
+.navbar-nav .nav-link:hover {
+  color: #0d6efd !important;
+}
+
 

@@ -34,7 +34,7 @@ class EventRepository extends Model {
 
     public function update(int $event_id , array $data) : bool {
         $sql = "update events set
-            title = :title, description = :description, 
+            title = :title,
             event_date = :event_date , reminder_time = :reminder_time ,
             notified = 0, notified_at = NULL
             where id=:event_id AND user_id=:user_id";
@@ -42,7 +42,7 @@ class EventRepository extends Model {
             ":event_id" => $event_id ,
             ":user_id" => $data["user_id"] ,
             ":title" => $data["title"] ,
-            ":description" => $data["description"] ?? "" ,
+            //":description" => $data["description"] ?? "" ,
             ":event_date" => $data["event_date"] ,
             ":reminder_time" => !empty($data["reminder_time"]) ? $data["reminder_time"] : null
         ]);

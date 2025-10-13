@@ -29,7 +29,7 @@ class EventController extends Controller {
             $response=$this->service->createEvent([
                         'user_id' => $_SESSION['user_id'] ,
                         'title' => trim($_POST['title']) , 
-                        'description' => trim($_POST['description']) , 
+                        //'description' => trim($_POST['description']) , 
                         'event_date' => $_POST['event_date'] ,
                         'reminder_time' => !empty($_POST['reminder_time']) ? 
                                             $_POST['reminder_time'] : null
@@ -38,9 +38,10 @@ class EventController extends Controller {
 
 
             if (!$response['success']) {
-                $this->view('events/create' ,[
+                $this->view('events/list' ,[
                     'errors' => $response['errors'] , 
-                    'event' => $response['event']
+                    'event' => $response['event'] ,
+                    'events' => $this->service->getUserEvents($_SESSION["user_id"])
                 ]);
             } else  {
                 $this->redirect('/', ['message'=> $response['message']]);
@@ -65,7 +66,7 @@ class EventController extends Controller {
                         'user_id' => $_SESSION['user_id'] ,
                         'id' => $_POST["event_id"] ,
                         'title' => trim($_POST['title']) , 
-                        'description' => trim($_POST['description']) , 
+                        //'description' => trim($_POST['description']) , 
                         'event_date' => $_POST['event_date'] ,
                         'reminder_time' => !empty($_POST['reminder_time']) ? 
                                             $_POST['reminder_time'] : null

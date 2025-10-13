@@ -8,11 +8,13 @@ class EventService {
     private EventRepository $repo;
     private MailService $mailer;
     private ValidationService $validation;
-
+    private ReminderQueueService $queueService;
+    
     public function __construct() {
         $this->repo = new EventRepository();
         $this->mailer = new MailService();
         $this->validation = new ValidationService();
+        $this->queueService = new ReminderQueueService();
     }
 
     public function getUserEvents(int $user_id) : ?array {
@@ -32,7 +34,7 @@ class EventService {
         $new_event = $this->repo->create([
                         'user_id' => $_SESSION['user_id'] ,
                         'title' => $data['title'] , 
-                        'description' => $data['description'] , 
+                        //'description' => $data['description'] , 
                         'event_date' => $data['event_date'] ,
                         'reminder_time' => $data['reminder_time']
                     ]);
@@ -42,7 +44,6 @@ class EventService {
         
             /*if (!empty($data['reminder_time'])) {
                 
-                $queueService = new ReminderQueueService();
                 $queueService->scheduleReminder(
                     $this->repo->getLastInsertId(), 
                     $_SESSION['user_id'],
@@ -51,13 +52,13 @@ class EventService {
             }*/
 
             //$this->checkSendEmail($data['title'], $data['event_date'], $updated);
-            $_SESSION['flash_message_create'] = 'Termin erfolgreich erstellt.';
+            $_SESSION['flash_message_create'] = 'Bezeichnung Erfolgreich erstellt.';
             return ['success' => true];
         }
 
         return [
             'success' => false,
-            'errors' => ['Fehler beim Erstellen des Termins. Versuchen Sie noch einmal.'],
+            'errors' => ['Fehler beim Erstellen der Bezeichnung. Versuchen Sie noch einmal.'],
             'event' => $data
         ];
 
@@ -79,7 +80,7 @@ class EventService {
         $updated_event= $this->repo->update($event_id , [
                         'user_id' => $_SESSION['user_id'] ,
                         'title' => $data['title'] , 
-                        'description' => $data['description'] , 
+                        //'description' => $data['description'] , 
                         'event_date' => $data['event_date'] ,
                         'reminder_time' => $data['reminder_time']
                     ]);
@@ -88,12 +89,9 @@ class EventService {
         $updated = true;
 
         if ($updated_event) {
-            
-            
-            $queueService = new ReminderQueueService();
 
-            if ($queueService->getEventFromQueue($event_id)) {
-                $queueService->deleteFromQueue($event_id);
+            if ($this->queueService->getEventFromQueue($event_id)) {
+                $this->queueService->deleteFromQueue($event_id);
             }
             /*
             if (!empty($data['reminder_time'])) {
@@ -113,24 +111,25 @@ class EventService {
             */
 
             //$this->checkSendEmail($data['title'], $data['event_date'], $updated);
-            $_SESSION['flash_message_update'] = 'Termin erfolgreich bearbeitet.';
             return ['success' => true];
         }
 
         return [
             'success' => false,
-            'errors' => ['Fehler beim Bearbeiten des Termins. Versuchen Sie noch einmal.'],
+            'errors' => ['Fehler beim Bearbeiten der Bezeichnung. Versuchen Sie noch einmal.'],
             'event' => $data
         ];
     }
 
     public function deleteEvent(int $event_id , int $user_id) : bool {
+        
         $deleted_event = $this->repo->delete($event_id,$user_id);
+        /*
         if ($deleted_event) {
-            $_SESSION['flash_message_email']="Termin Erfolgreich gelöcht.";
+            $_SESSION['flash_message_delete']="Bezeichnung Erfolgreich gelöcht.";
         } else {
-            $_SESSION['flash_message_email']="Fehler beim Löchen. Versuchen Sie noch einmal!";
-        }
+            $_SESSION['flash_message_delete']="Fehler beim Löchen. Versuchen Sie noch einmal!";
+        }*/
         return $deleted_event;
     }
 

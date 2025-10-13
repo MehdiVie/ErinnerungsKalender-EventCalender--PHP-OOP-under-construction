@@ -1,54 +1,77 @@
+<?php if (!empty($errors)): ?>
+  <div class="alert alert-danger">
+    <ul class="mb-0">
+      <?php foreach ($errors as $error): ?>
+        <li><?= htmlspecialchars($error) ?></li>
+      <?php endforeach; ?>
+    </ul>
+  </div>
+<?php endif; ?>
 
-    <?php if (!empty($errors)): ?>
-        <div class="alert alert-danger">
-            <ul>
-                <?php foreach ($errors as $error): ?>
-                    <li><?= htmlspecialchars($error) ?></li>
-                <?php endforeach; ?>
-            </ul>
+<?php 
+if (empty($event)) {
+  $event = [
+    'title' => '', 
+    'description' => '', 
+    'event_date' => '', 
+    'reminder_time' => ''
+  ];
+}
+?>
+
+<div class="card shadow-sm mt-3">
+  <div class="card-body">
+    <h5 class="card-title mb-3 text-primary">
+      <i class="bi bi-plus-circle"></i> Neuer Termin
+    </h5>
+
+    <form action="<?= BASE_URL ?>/events/store" method="post" class="needs-validation" >
+      <div class="row g-3">
+
+        <!-- Datum -->
+        <div class="col-12 col-md-4">
+          <label for="event_date" class="form-label fw-semibold">Datum</label>
+          <input type="date" name="event_date" id="event_date" 
+                 value="<?= htmlspecialchars($event['event_date']) ?>" 
+                 class="form-control" required>
+          <div class="invalid-feedback">Bitte ein Datum eingeben.</div>
         </div>
-    <?php endif; ?>
-    <?php 
-    if (empty($event)) {
-        $event=[
-            'title' => '' , 
-            'description' => '', 
-            'event_date' => '', 
-            'reminder_time' => ''
-        ];
-    }
-    ?>
-    <form action="<?= BASE_URL ?>/events/store" method="post">
-    <div class="d-flex justify-content-center border border-dark p-4">
-        
 
-            <div class="m-3">
-                <label for="event_date">Datum</label><br>
-                <input type="date" name="event_date" id="event_date" value="<?=htmlspecialchars($event['event_date']) ?>" required><br><br>
-            </div>
-            <!--
-            <label for="description">Description:</label><br>
-            <textarea name="description" id="description" cols="40" rows="4"><?=htmlspecialchars($event['description']) ?></textarea><br><br>-->
+        <!-- Bezeichnung -->
+        <div class="col-12 col-md-4">
+          <label for="title" class="form-label fw-semibold">Bezeichnung</label>
+          <input type="text" name="title" id="title" 
+                 value="<?= htmlspecialchars($event['title']) ?>" 
+                 class="form-control" required>
+          <div class="invalid-feedback">Bitte Bezeichnung eingeben.</div>
+        </div>
 
-            
-            <div class="m-3">
-                <label for="title">Bezeichnung</label><br>
-                <input type="text" name="title" id="title" value="<?=htmlspecialchars($event['title']) ?>" required><br><br>
-            </div>
+        <!-- Erinnerungszeit -->
+        <div class="col-12 col-md-4">
+          <label for="reminder_time" class="form-label fw-semibold">Erinnerungszeit</label>
+          <input type="datetime-local" name="reminder_time" id="reminder_time" 
+                 value="<?= htmlspecialchars($event['reminder_time']) ?>" 
+                 class="form-control"  required>
+           <div class="invalid-feedback">Bitte Erinnerungszeit eingeben.</div>
+        </div>
 
-            <div class="m-3">
-                <label for="reminder_time">Erinnerungszeit</label><br>
-                <input type="datetime-local" name="reminder_time" id="reminder_time" value="<?=htmlspecialchars($event['reminder_time']) ?>"><br><br>
-            </div>
+        <!-- Beschreibung (optional, wenn du es später zeigen willst) -->
+        <!--
+        <div class="col-12">
+          <label for="description" class="form-label fw-semibold">Beschreibung</label>
+          <textarea name="description" id="description" rows="3" 
+                    class="form-control"><?= htmlspecialchars($event['description']) ?></textarea>
+        </div>
+        -->
 
-            <div class="d-flex align-items-center m-3">
-                <button type="submit" name="create_event" class="btn btn-success">Speichern</button>
-                
-            </div>
+        <!-- Submit Button -->
+        <div class="col-12 text-center mt-3">
+          <button type="submit" name="create_event" class="btn btn-success px-4">
+            <i class="bi bi-save"></i> Speichern
+          </button>
+        </div>
 
-        
-    </div>
+      </div>
     </form>
-
-    
-
+  </div>
+</div>

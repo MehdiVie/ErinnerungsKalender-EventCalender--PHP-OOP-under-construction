@@ -13,8 +13,8 @@
         <label for="title">Title:</label><br>
         <input type="text" name="title" id="title" value="<?=htmlspecialchars($event['title']) ?>"><br><br>
 
-        <label for="description">Description:</label><br>
-        <textarea name="description" id="description" cols="40" rows="4"><?=htmlspecialchars($event['description']) ?></textarea><br><br>
+        <!--<label for="description">Description:</label><br>
+        <textarea name="description" id="description" cols="40" rows="4"><?=htmlspecialchars($event['description']) ?></textarea><br><br>-->
 
         <label for="event_date">Datum:</label><br>
         <input type="date" name="event_date" id="event_date" value="<?=htmlspecialchars($event['event_date']) ?>"><br><br>
