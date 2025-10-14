@@ -1,7 +1,7 @@
 # 🗓️ Reminder Calendar (PHP MVC Project)
 
-A lightweight MVC-based PHP web application for managing personal events with automated **email reminders**.  
-Includes login & registration, event CRUD, reminder scheduling, and a manual Cron execution system.  
+A lightweight MVC-based PHP web application for managing personal events with automated email reminders.  
+Includes login & registration, event CRUD, reminder scheduling, and a manual Cron execution system.
 
 ---
 
@@ -9,10 +9,10 @@ Includes login & registration, event CRUD, reminder scheduling, and a manual Cro
 
 - User registration & login (session-based authentication)  
 - Event management: Create, edit, delete  
-- Validation rules:
-  - `reminder_time` ≥ **current datetime**  
-  - `event_date` ≥ **tomorrow’s date**  
-- Email notifications via **PHPMailer**  
+- **Validation rules:**
+  - `reminder_time ≥ current datetime`
+  - `event_date ≥ tomorrow’s date`
+- Email notifications via PHPMailer  
 - MySQL Event for auto-filling the reminder queue  
 - Manual Cron execution for sending reminders  
 - Clean, responsive interface (Bootstrap)  
@@ -22,7 +22,7 @@ Includes login & registration, event CRUD, reminder scheduling, and a manual Cro
 
 ## 📂 Project Structure (with description)
 
-```text
+```
 erinnerungskalender/
 │
 ├── app/                           # Main application logic (MVC)
@@ -113,44 +113,44 @@ erinnerungskalender/
 
 ## ⚙️ Installation
 
-1. **Place the project**  
-   Example (Laragon/XAMPP):  
-   ```
-   C:\laragon\www\erinnerungskalender\
-   ```
+### 1. Place the project  
+Example (Laragon/XAMPP):
+```
+C:\laragon\www\erinnerungskalender\
+```
 
-2. **Create database and import schema**  
-   - Create DB (e.g., `erinnerungskalender_db`)  
-   - Import `database/database.sql`
+### 2. Create database and import schema  
+- Create DB (e.g., `erinnerungskalender_db`)  
+- Import `database/database.sql`
 
-3. **Configure `.env`**
-   ```ini
-   APP_ENV=development
-   DB_HOST=127.0.0.1
-   DB_NAME=erinnerungskalender_db
-   DB_USER=root
-   DB_PASS=
+### 3. Configure `.env`
+APP_ENV=development
+DB_HOST=127.0.0.1
+DB_NAME=erinnerungskalender_db
+DB_USER=root
+DB_PASS=
 
-   MAIL_HOST=smtp.gmail.com
-   MAIL_PORT=587
-   MAIL_USERNAME=your_email@gmail.com
-   MAIL_PASSWORD=your_16_char_app_password
-   MAIL_FROM_NAME=Reminder Calendar
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USERNAME=your_email@gmail.com
+MAIL_PASSWORD=your_16_char_app_password
+MAIL_FROM_NAME=Reminder Calendar
 
-   
-   ```
 
-4. **Run the app**
-   Open in browser:  
-   ```
-   http://localhost/erinnerungskalender/public/
-   ```
+```
+
+### 4. Run the app  
+Open in browser:
+```
+http://localhost/erinnerungskalender/public/
+```
 
 ---
 
 ## 🕒 Cron & Reminder Queue
 
-### MySQL Event (fills the reminder_queue automatically)
+### MySQL Event (auto-fills the reminder_queue)
+
 ```sql
 DROP EVENT IF EXISTS ev_fill_reminder_queue;
 DELIMITER $$
@@ -158,6 +158,7 @@ CREATE EVENT ev_fill_reminder_queue
 ON SCHEDULE EVERY 1 MINUTE
 DO
 BEGIN
+  
   INSERT INTO reminder_queue (event_id, user_id, scheduled_at)
   SELECT e.id, e.user_id, e.reminder_time
   FROM events e
@@ -176,30 +177,32 @@ You can manually trigger reminder sending via:
 ```
 http://localhost/erinnerungskalender/public/run-cron
 ```
+
 It processes all pending reminders and logs results in  
 `app/cron/cron.log`.
+
+> **Note:**  
+> In a real production environment, the `cronReminder.php` script would normally be executed automatically by the operating system (e.g., via a Cron Job or Task Scheduler) at regular intervals to send reminder emails.  
+> However, for demonstration and testing purposes, this project includes a **“Run-Cron”** menu item to manually trigger the process.
 
 ---
 
 ## ✅ Validation Logic
-
 - `reminder_time` → must be **today or later**, not in the past.  
 - `event_date` → must be **tomorrow or later** (date only).  
-Both validations use `Europe/Vienna` timezone.
+Both validations use the `Europe/Vienna` timezone.
 
 ---
 
 ## 🔒 Security
-
-- Uses **PDO prepared statements**
-- Escapes output via `htmlspecialchars`
-- `.env` is excluded from Git (`.gitignore`)
-- Optional CSRF protection can be added for AJAX
+- Uses **PDO prepared statements**  
+- Escapes all user output via `htmlspecialchars()`  
+- `.env` excluded from Git via `.gitignore`  
+- Optional CSRF protection can be added for AJAX  
 
 ---
 
 ## 🧠 Technologies
-
 - PHP 8.x  
 - MySQL / MariaDB  
 - PHPMailer  
@@ -209,9 +212,4 @@ Both validations use `Europe/Vienna` timezone.
 ---
 
 ## 📧 Test Account (optional)
-You can register manually or create a test user directly in the DB.
-
----
-
-## 📄 License
-For demonstration and educational purposes only.
+You can register manually or create a test user directly in the database.
