@@ -71,8 +71,6 @@ CREATE EVENT ev_fill_reminder_queue
 ON SCHEDULE EVERY 1 MINUTE
 DO
 BEGIN
-  SET time_zone = 'Europe/Vienna';
-
   INSERT INTO reminder_queue (event_id, user_id, scheduled_at)
   SELECT e.id, e.user_id, e.reminder_time
   FROM events e

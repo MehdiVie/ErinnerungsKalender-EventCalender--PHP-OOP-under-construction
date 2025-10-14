@@ -21,9 +21,6 @@ if (empty($event)) {
 
 <div class="card shadow-sm mt-3">
   <div class="card-body">
-    <h5 class="card-title mb-3 text-primary">
-      <i class="bi bi-plus-circle"></i> Neuer Termin
-    </h5>
 
     <form action="<?= BASE_URL ?>/events/store" method="post" class="needs-validation" >
       <div class="row g-3">

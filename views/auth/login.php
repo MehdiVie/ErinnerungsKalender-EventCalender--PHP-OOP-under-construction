@@ -1,4 +1,4 @@
-    <h2>Benutzer Login</h2>
+    <h3 class="fw-semibold mb-3 text-dark">Benutzer Login</h3>
     <?php if (isset($errors)): ?>
         <div class="alert alert-danger">
             <ul>
@@ -12,11 +12,11 @@
         <div class="alert alert-success"><?= htmlspecialchars($message) ?></div>
     <?php endif; ?>
     <form action="<?= BASE_URL ?>/login" method="post">
-        <label for="email">* Email:</label><br>
-        <input type="email" name="email" id="email" required><br><br>
+        <label for="email">* Email</label><br>
+        <input type="email" name="email" id="email" class="form-label fw-semibold" required><br><br>
 
-        <label for="password">* Password:</label><br>
-        <input type="password" name="password" id="password" required><br><br>
+        <label for="password">* Password</label><br>
+        <input type="password" name="password" id="password" class="form-label fw-semibold" required><br><br>
 
         <button type="submit" name="login" class="btn btn-primary px-4">Login</button>
     </form>

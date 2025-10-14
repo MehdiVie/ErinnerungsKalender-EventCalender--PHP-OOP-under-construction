@@ -34,7 +34,12 @@
             <td><?= $event["reminder_time"] ? htmlspecialchars($event["reminder_time"]) : '-' ?></td>
             <td>
               <div class="d-flex flex-wrap justify-content-center gap-2">
-                <button class="edit-btn btn btn-sm btn-warning">
+                <button class="edit-btn btn btn-sm btn-warning" 
+                <?php 
+                if(new DateTime($event["event_date"])<=new DateTime('today')): ?> 
+                  disabled
+                <?php endif; ?>
+                >
                   <i class="bi bi-pencil"></i> Bearbeiten
                 </button>
                 <button class="delete-btn btn btn-sm btn-danger">

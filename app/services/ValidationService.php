@@ -8,6 +8,8 @@ class ValidationService {
         
         if (empty(trim($data['name']))) {
             $errors[] = "Name darf nicht leer sein.";
+        } else if (strlen($data['name']) < 3) {
+            $errors[] = "Name muss mindestens 3 Zeichen haben.";
         }
 
         if (empty(trim($data['email']))) {
@@ -50,6 +52,7 @@ class ValidationService {
         } else if (!$this->isValidReminderTime($data['reminder_time'])) {
 
             $now = new DateTime('now', $tz);
+            $now->modify('+1 minute');
 
             $errors[] = "Erinnerungszeit darf mindestens ". $now->format('Y-m-d H:i') . " liegen.";
         }
@@ -109,7 +112,7 @@ class ValidationService {
         //echo $datetime->format('Y-m-d H:i');
         //exit;
 
-        return $datetime >= $now;
+        return $datetime > $now;
     }
 
     public function eventDateGreaterThanReminderTime(string $event_date,

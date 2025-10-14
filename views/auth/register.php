@@ -1,4 +1,4 @@
-    <h2>Benutzer Registrierung</h2>
+    <h3 class="fw-semibold mb-3 text-dark">Benutzer Registrierung</h3>
     <?php if (isset($errors)): ?>
         <div class="alert alert-danger">
             <ul>
@@ -9,14 +9,14 @@
         </div>
     <?php endif; ?>
     <form method="POST" action="<?= BASE_URL ?>/register">
-        <label for="name">* Name:</label><br>
-        <input type="text" name="name" id="name" required><br><br>
+        <label for="name">* Name (min 3 Zeichen)</label><br>
+        <input type="text" name="name" id="name" class="form-label fw-semibold" required><br><br>
 
-        <label for="email">* E-Mail:</label><br>
-        <input type="email" name="email" id="email" required><br><br>
+        <label for="email">* E-Mail</label><br>
+        <input type="email" name="email" class="form-label fw-semibold" id="email" required><br><br>
 
-        <label for="password">* Password: (min 6 Zeichen)</label><br>
-        <input type="password" name="password" id="password" required><br><br>
+        <label for="password">* Password (min 6 Zeichen)</label><br>
+        <input type="password" name="password" class="form-label fw-semibold" id="password" required><br><br>
 
         <button type="submit" name="register" class="btn btn-primary px-4">Registrieren</button>
     </form>

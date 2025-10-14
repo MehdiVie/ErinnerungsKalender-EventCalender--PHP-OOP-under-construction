@@ -1,98 +1,217 @@
-# README
+# 🗓️ Reminder Calendar (PHP MVC Project)
 
-# 📘 Project: Erinnerungskalender (Reminder Calendar)
-
-A PHP-based web application for creating and managing events with automatic reminder emails via PHPMailer.
-
----
-
-## 🧩 Features
-
-- User registration and login
-- Create, edit, and delete events
-- Set reminder date/time
-- Automatic email reminders
-- View reminder queue
-- Manual Cron run from the menu (Run Cron)
-- Responsive Bootstrap design
-- Full backend validation
+A lightweight MVC-based PHP web application for managing personal events with automated **email reminders**.  
+Includes login & registration, event CRUD, reminder scheduling, and a manual Cron execution system.  
 
 ---
 
-## 💾 Database
+## 🚀 Features
 
-Run:
+- User registration & login (session-based authentication)  
+- Event management: Create, edit, delete  
+- Validation rules:
+  - `reminder_time` ≥ **current datetime**  
+  - `event_date` ≥ **tomorrow’s date**  
+- Email notifications via **PHPMailer**  
+- MySQL Event for auto-filling the reminder queue  
+- Manual Cron execution for sending reminders  
+- Clean, responsive interface (Bootstrap)  
+- Secure PDO-based database access  
 
+---
+
+## 📂 Project Structure (with description)
+
+```text
+erinnerungskalender/
+│
+├── app/                           # Main application logic (MVC)
+│   ├── controllers/               # Handles user actions (login, events, cron)
+│   │   ├── AuthController.php     # Registration & authentication
+│   │   ├── EventController.php    # CRUD operations for events
+│   │   ├── HomeController.php     # Dashboard view after login
+│   │   └── ReminderQueueController.php  # Manages reminder queue & cron execution
+│   │
+│   ├── core/                      # Core system (Router, DB, Model)
+│   │   ├── Controller.php         # Base class for all controllers
+│   │   ├── Database.php           # PDO connection to MySQL
+│   │   ├── Model.php              # Base model class
+│   │   └── Router.php             # Simple routing (URL → Controller/Action)
+│   │
+│   ├── cron/                      # Scheduled background processes
+│   │   ├── cron.log               # Log file for reminder sending
+│   │   └── cronReminder.php       # Script for sending email reminders
+│   │
+│   ├── libs/PHPMailer/            # PHPMailer library (email sending)
+│   │   ├── Exception.php
+│   │   ├── PHPMailer.php
+│   │   └── SMTP.php
+│   │
+│   ├── models/                    # Data models
+│   │   ├── Event.php              # Event entity
+│   │   └── User.php               # User entity
+│   │
+│   ├── repositories/              # Database operations (CRUD)
+│   │   ├── EventRepository.php
+│   │   ├── ReminderQueueRepository.php
+│   │   └── UserRepository.php
+│   │
+│   └── services/                  # Business logic & helper services
+│       ├── EventService.php       # Event handling logic
+│       ├── MailService.php        # PHPMailer setup & sending
+│       ├── ReminderQueueService.php # Queue management
+│       ├── UserService.php        # User management
+│       └── ValidationService.php  # Validation (dates, inputs)
+│
+├── config/                        # Configuration files
+│   ├── env.php                    # Loads environment variables
+│   └── paths.php                  # Global paths and constants
+│
+├── database/                      # Database schema
+│   └── database.sql               # SQL structure for tables
+│
+├── public/                        # Public web directory (entry point)
+│   ├── ajax/                      # AJAX endpoints for async actions
+│   │   └── ajax_events.php
+│   ├── css/                       # Stylesheets (Bootstrap + custom)
+│   │   └── style.css
+│   ├── images/                    # Logos and UI images
+│   │   ├── logo.png
+│   │   └── welcome.jpg
+│   ├── js/                        # JavaScript files
+│   │   └── main.js
+│   ├── .htaccess                  # Rewrite all requests to index.php
+│   └── index.php                  # Front Controller (Router entry)
+│
+├── uploads/                       # Reserved folder for user uploads
+│
+├── views/                         # HTML/PHP templates (View layer)
+│   ├── auth/                      # Login & registration pages
+│   │   ├── login.php
+│   │   └── register.php
+│   ├── events/                    # CRUD pages for events
+│   │   ├── create.php
+│   │   ├── edit.php
+│   │   └── list.php
+│   ├── home/                      # Dashboard (after login)
+│   │   └── index.php
+│   ├── includes/                  # Reusable UI components
+│   │   ├── footer.php
+│   │   ├── header.php
+│   │   └── navbar.php
+│   ├── layouts/                   # Main layout structure
+│   │   └── main.php
+│   └── reminders/                 # Reminder queue view
+│       └── index.php
+│
+├── .env                           # Environment variables (DB, Mail)
+├── .gitignore                     # Git ignore rules
+└── README.md                      # Project documentation
 ```
-database/database.sql
-```
-
-Tables:
-- users
-
-- events
-
-- reminder_queue
 
 ---
 
-## ⏰ MySQL Event and Cron
+## ⚙️ Installation
 
-**MySQL Event:** automatically fills the reminder_queue every minute.
+1. **Place the project**  
+   Example (Laragon/XAMPP):  
+   ```
+   C:\laragon\www\erinnerungskalender\
+   ```
 
-**cronReminder.php:** sends reminder emails and logs results.
+2. **Create database and import schema**  
+   - Create DB (e.g., `erinnerungskalender_db`)  
+   - Import `database/database.sql`
 
-In production, use a Task Scheduler to run the script automatically.
+3. **Configure `.env`**
+   ```ini
+   APP_ENV=development
+   DB_HOST=127.0.0.1
+   DB_NAME=erinnerungskalender_db
+   DB_USER=root
+   DB_PASS=
 
-For testing, use the menu item **Run-Cron**.
+   MAIL_HOST=smtp.gmail.com
+   MAIL_PORT=587
+   MAIL_USERNAME=your_email@gmail.com
+   MAIL_PASSWORD=your_16_char_app_password
+   MAIL_FROM_NAME=Reminder Calendar
 
----
+   
+   ```
 
-## 📧 Email Configuration
-
-Edit `config/env.php`:
-
-```php
-$_ENV['MAIL_HOST'] = 'smtp.gmail.com';$_ENV['MAIL_PORT'] = 587;$_ENV['MAIL_USERNAME'] = 'your.email@gmail.com';$_ENV['MAIL_PASSWORD'] = 'your_16_digit_app_password';$_ENV['MAIL_FROM_NAME'] = 'Erinnerungskalender';
-```
-
----
-
-## 🚀 How to Run
-
-### Requirements
-
-- PHP ≥ 8.1
-- MySQL ≥ 5.7
-- Apache (Laragon / XAMPP)
-
-### Steps
-
-1. Copy the project to:
-    
-    ```
-    C:\laragon\www\erinnerungskalender
-    ```
-    
-2. Import `database.sql` into MySQL.
-3. Update `config/env.php` with your email credentials.
-4. Start Apache.
-
-### Access
-
-```
-http://localhost/erinnerungskalender/public/
-```
-
-### Run Cron Manually
-
-Click **Run Cron** from the menu.
+4. **Run the app**
+   Open in browser:  
+   ```
+   http://localhost/erinnerungskalender/public/
+   ```
 
 ---
 
-## ✅ Status
+## 🕒 Cron & Reminder Queue
 
-- MVC structure complete
-- Email sending tested
-- MySQL Event active
-- Final tests pending
+### MySQL Event (fills the reminder_queue automatically)
+```sql
+DROP EVENT IF EXISTS ev_fill_reminder_queue;
+DELIMITER $$
+CREATE EVENT ev_fill_reminder_queue
+ON SCHEDULE EVERY 1 MINUTE
+DO
+BEGIN
+  INSERT INTO reminder_queue (event_id, user_id, scheduled_at)
+  SELECT e.id, e.user_id, e.reminder_time
+  FROM events e
+  WHERE e.reminder_time IS NOT NULL
+    AND e.reminder_time <= NOW()
+    AND e.notified = 0
+    AND NOT EXISTS (
+      SELECT 1 FROM reminder_queue q WHERE q.event_id = e.id
+    );
+END$$
+DELIMITER ;
+```
+
+### Manual Cron Execution
+You can manually trigger reminder sending via:
+```
+http://localhost/erinnerungskalender/public/run-cron
+```
+It processes all pending reminders and logs results in  
+`app/cron/cron.log`.
+
+---
+
+## ✅ Validation Logic
+
+- `reminder_time` → must be **today or later**, not in the past.  
+- `event_date` → must be **tomorrow or later** (date only).  
+Both validations use `Europe/Vienna` timezone.
+
+---
+
+## 🔒 Security
+
+- Uses **PDO prepared statements**
+- Escapes output via `htmlspecialchars`
+- `.env` is excluded from Git (`.gitignore`)
+- Optional CSRF protection can be added for AJAX
+
+---
+
+## 🧠 Technologies
+
+- PHP 8.x  
+- MySQL / MariaDB  
+- PHPMailer  
+- Bootstrap 5  
+- JavaScript (AJAX)
+
+---
+
+## 📧 Test Account (optional)
+You can register manually or create a test user directly in the DB.
+
+---
+
+## 📄 License
+For demonstration and educational purposes only.

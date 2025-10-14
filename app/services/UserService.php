@@ -48,7 +48,7 @@ class UserService {
             return ['success' => true , 'user' => $user];
         }
 
-        return ['success' => false , 'errors' => ['Falsche Username oder Password.']];
+        return ['success' => false , 'errors' => ['Falsches Username oder Password.']];
     }
 
     public function logoutUser() : void {
